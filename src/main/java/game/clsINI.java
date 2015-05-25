@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 /**
  * 
+ *  
  * Ini fájl kezelésére szolgáló osztály
  */
 public class clsINI
@@ -24,6 +25,7 @@ public class clsINI
     */
     public static void cretaeINIFile()
     {
+        p = new Properties();
         myINIFileName = System.getProperty("user.home")+"//game//"+"game.xml";
         File myIniFile = new File(myINIFileName);
         if (!myIniFile.exists())
@@ -32,7 +34,6 @@ public class clsINI
             {
                 if (myIniFile.createNewFile())
                 {
-                    p = new Properties();
                     p.load(new FileInputStream(myINIFileName));
                     setKeyValue("EnableLog", "yes");
                     setKeyValue("logLevel", "FINE");
@@ -47,11 +48,25 @@ public class clsINI
                 System.out.println("Exception thrown: " + ex);
             }
         }
+        else
+        {
+            try
+            {
+                p.loadFromXML(new FileInputStream(myINIFileName));
+
+            }
+            catch(Exception ex)
+            {
+                System.out.println("Exception thrown: " + ex);
+                
+            }
+        }
+            
     }
     
     public static void setKeyValue(String key, String value)
     {
-        keyValueMapXML.put(key, value);
+        p.setProperty(key, value);
     }
     
     /**
@@ -78,21 +93,21 @@ public class clsINI
     */
     public static String readINIFileXML(String sParam) 
     {
-        try 
-        {
+//        try 
+//        {
             String sValue;
-            p = new Properties();
-            p.load(new FileInputStream(myINIFileName));
+//            p = new Properties();
+//            p.load(new FileInputStream(myINIFileName));
 //            p.loadFromXML(new FileInputStream(myINIFileName));
             sValue = p.getProperty(sParam);
-            setKeyValue(sParam, sValue);
+//            setKeyValue(sParam, sValue);
             return sValue;
-        } 
-        catch (Exception ex) 
-        {
+//        } 
+//        catch (Exception ex) 
+//        {
 //            System.out.println("Exception thrown: " + ex);
-        }
-        return "";
+//        }
+//        return "";
     }
 
     /**
@@ -104,14 +119,8 @@ public class clsINI
     {
         try 
         {
-            p = new Properties();
-            p.load(new FileInputStream(myINIFileName));
-            Iterator mapInterator = keyValueMapXML.entrySet().iterator();
-            while (mapInterator.hasNext()) 
-            {
-                Map.Entry<String, String> pairs = (Map.Entry) mapInterator.next();
-                p.setProperty(pairs.getKey(), pairs.getValue());
-            }
+//            p = new Properties();
+//            p.load(new FileInputStream(myINIFileName));
             p.storeToXML(new FileOutputStream(myINIFileName), "");
         } 
         catch (Exception ex) 

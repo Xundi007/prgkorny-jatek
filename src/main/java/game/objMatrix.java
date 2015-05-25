@@ -2,6 +2,7 @@ package game;
 
 /**
  * 
+ *  
  * A játéktábla mátrix reprezentációja
  * A játékosok lépései a mátrixban rögzítődnek
 */

@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 /**
  *
+ *  
  */
 public class Game extends JFrame
 {
@@ -15,7 +16,7 @@ public class Game extends JFrame
     public static void main(String[] args) 
     {
 	JFrame.setDefaultLookAndFeelDecorated(true); 
-        JFrame wFrame = new JFrame("                     2.33. Feladat"); 
+        JFrame wFrame = new JFrame("                     2.33. Feladat");
         wFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameGUI gameWindow = new gameGUI();
         wFrame.setContentPane(gameWindow.createGUI(wFrame));

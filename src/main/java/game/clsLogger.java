@@ -6,6 +6,7 @@ import java.util.Date;
 
 /**
  * 
+ *  
  * Naplózást megvalósító osztály
  */
 public class clsLogger
@@ -26,13 +27,13 @@ public class clsLogger
             String stmp = clsINI.readINIFileXML("EnableLog");
             Date date = new Date() ;
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
-//            if (stmp.equals("yes") || stmp.equals(""))
-//            {
+            if (stmp.equals("yes") || stmp.equals(""))
+            {
                 enableLog = true;  
-//            }
+            }
             fh = new FileHandler(System.getProperty("user.home") + "//game//" + "game" + df.format(date) + ".log");
             stmp = clsINI.readINIFileXML("logLevel");
-//            if (stmp.equals(""))
+            if (stmp.equals(""))
                 stmp = "INFO";
             switch (stmp) {
                 case "FINEST":

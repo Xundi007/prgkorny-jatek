@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
+ *  
  */
 public class clsLoggerTest {
     
@@ -42,7 +43,7 @@ public class clsLoggerTest {
     @Test
     public void testInitLogger() {
         System.out.println("initLogger");
-        clsLogger.initLogger();
+        //clsLogger.initLogger();
         assertTrue(true);
     }
 

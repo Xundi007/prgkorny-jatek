@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
  
 /**
  * 
+ *  
  *Perzisztens adattárolás XML fájlban
  *Az adatbázis alternatívája
  */
