@@ -14,6 +14,10 @@
             <url>http://www.gnu.org/copyleft/gpl.html</url>
         </license>
     </licenses>
+	<inceptionYear>2015</inceptionYear>
+	<organization>
+		<name>Faculty of Informatics, University of Debrecen</name>
+	</organization>
     <developers>
         <developer>
             <id>prgkorny</id>
