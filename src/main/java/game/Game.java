@@ -45,7 +45,7 @@ public class Game extends JFrame
 		gameGUI gameWindow = new gameGUI();
 		wFrame.setContentPane(gameWindow.createGUI(wFrame));
 		wFrame.addWindowFocusListener(gameWindow);
-		wFrame.setSize(550,650);
+		wFrame.setSize(550,675);
 		wFrame.setResizable(false);
 		wFrame.setVisible(true);
 		wFrame.pack();
