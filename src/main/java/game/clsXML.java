@@ -94,7 +94,7 @@ public class clsXML
 				Document doc = dBuilder.parse(xmlFile);
 				NodeList list = doc.getElementsByTagName("Players");
 				int nodeCount = list.getLength() + 1;
-				System.out.println(nodeCount);
+//				System.out.println(nodeCount);
 				Element participants = doc.createElement("Players");
 				Element rootElement = doc.getDocumentElement();
 				rootElement.appendChild(participants);

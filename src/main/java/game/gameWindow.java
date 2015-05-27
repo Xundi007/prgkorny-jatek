@@ -116,16 +116,16 @@ public class gameWindow extends Canvas implements MouseListener, MouseMotionList
 			* játék vége
 			*/
 			if (currentPlayer == 1)
-			{						
-				currentPlayer = 2;						
+			{
+				currentPlayer = 2;
 			}
 			else
-			{						
-				currentPlayer = 1;						
+			{
+				currentPlayer = 1;
 			}
-			
+
 			setFinalScore();
-			
+
 			clsXML.saveData(strPlayerName[0], score[0]);
 			clsXML.saveData(strPlayerName[1], score[1]);
 			String msg;
@@ -459,12 +459,12 @@ public class gameWindow extends Canvas implements MouseListener, MouseMotionList
 		}
 		startSelection = false;
 		if (currentPlayer == 1)
-		{						
-			currentPlayer = 2;						
+		{
+			currentPlayer = 2;
 		}
 		else
-		{						
-			currentPlayer = 1;						
+		{
+			currentPlayer = 1;
 		}
 		if (isGameOver(cellMatrix.getgameMatrix(), currentPlayer))
 		{
@@ -473,8 +473,8 @@ public class gameWindow extends Canvas implements MouseListener, MouseMotionList
 		}
 		strStatusMsg = getGameMsg();
 	}
-	
-	
+
+
 	/**
 	* Játékszabály.
 	*   Az üres mezők számát hozzá kell adni az utolsó lépni tudó
@@ -821,7 +821,7 @@ public class gameWindow extends Canvas implements MouseListener, MouseMotionList
 	public void mousePressed (MouseEvent e)
 	{
 		if (!victory && !firstTime)
-		{			
+		{
 			int x = e.getX();
 			int y = e.getY();
 			/*
@@ -897,7 +897,7 @@ public class gameWindow extends Canvas implements MouseListener, MouseMotionList
 	*/
 	public void gotFocus ()
 	{
-		repaint();		
+		repaint();
 	}
 	
 	

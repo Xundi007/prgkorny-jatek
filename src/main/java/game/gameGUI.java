@@ -142,8 +142,8 @@ public class gameGUI implements ActionListener, KeyListener, WindowFocusListener
 		panNameButton.setBackground(clrBackground);
 		panExitButton.setBackground(clrBackground);
 		panNewGame.setBackground(clrBackground);
-		lblPlayerOne.setBackground(new Color(236,17,17)); //red
-		lblPlayerTwo.setBackground(new Color(17,27,237)); //blue
+		lblPlayerOne.setBackground(new Color(236,17,17)); //piros
+		lblPlayerTwo.setBackground(new Color(17,27,237)); //kék
 		cmdNewGame.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		cmdExit.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		return panRoot;
@@ -283,7 +283,7 @@ public class gameGUI implements ActionListener, KeyListener, WindowFocusListener
 	*/
 	public void CheckOrCreateFolder()
 	{
-		System.out.println(System.getProperty("user.dir"));
+//		System.out.println(System.getProperty("user.dir"));
 		File file = new File(System.getProperty("user.home") + "//game");
 		if (!file.exists()) 
 			{
