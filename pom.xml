@@ -6,7 +6,7 @@
     <groupId>hu.unideb.inf</groupId>
     <artifactId>prgkorny-jatek</artifactId>
     <packaging>jar</packaging>
-    <version>0.5</version>
+    <version>1.0</version>
     <description>Logikai kétszemélyes társasjáték.</description>
     <licenses>
         <license>
@@ -16,21 +16,26 @@
     </licenses>
 	<inceptionYear>2015</inceptionYear>
 	<organization>
-		<name>Faculty of Informatics, University of Debrecen</name>
+		<name>Debreceni Egyetem, Informatikai Kar</name>
 	</organization>
     <developers>
         <developer>
-            <id>prgkorny</id>
-            <name>Xundi007</name>
+            <id>Xundi007</id>
+            <name>Fekete Sándor</name>
             <email>sanya95.hu@gmail.hu</email>
             <url>http://xundi.ddns.net</url>
-            <organization>Faculty of Informatics, University of Debrecen</organization>
-            <organizationUrl>http://www.inf.unideb.hu/</organizationUrl>
+            <organization>Debreceni Egyetem, Informatikai Kar</organization>
+            <organizationUrl>http://w1.inf.unideb.hu/</organizationUrl>
             <roles>
-                <role>developer</role>
+                <role>fejlesztő</role>
             </roles>
+			<timezone>+1</timezone>
         </developer>
     </developers>
+	<scm>
+		<connection>scm:git:https://github.com/Xundi007/prgkorny-jatek.git</connection>
+		<url>https://github.com/Xundi007/prgkorny-jatek</url>
+	</scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
@@ -45,7 +50,6 @@
 		</dependency>
 	</dependencies>
     <build>
-        <defaultGoal>package</defaultGoal>
         <plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -54,6 +58,7 @@
 				<executions>
 					<execution>
 						<id>enforce-java-version</id>
+						<phase>validate</phase>
 						<goals>
 							<goal>enforce</goal>
 						</goals>
@@ -70,7 +75,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.3</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -93,7 +98,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>2.5.4</version>
                 <executions>
                     <execution>
                         <id>make-assembly</id>
@@ -114,6 +119,23 @@
                     </execution>
                 </executions>
             </plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.8</version>
+				<configuration>
+					<licenseName>gpl_v3</licenseName>
+				</configuration>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+					</execution>
+				</executions>
+			</plugin>
         </plugins>
     </build>
 		<reporting>
