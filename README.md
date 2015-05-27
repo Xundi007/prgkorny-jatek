@@ -16,10 +16,10 @@ A projekt könyvtárából a következő parancsokkal:
 
 - Fordítás:
 
-        $ mvn package
+        > mvn package
 - Futtatás:
 
-        $ java -jar target/prgkorny-jatek-1.0-jar-with-dependencies.jar
+        > java -jar target/prgkorny-jatek-1.0-jar-with-dependencies.jar
 vagy
 
-        $ mvn exec:java -Dexec.mainClass=game.Game
+        > mvn exec:java -Dexec.mainClass=game.Game
