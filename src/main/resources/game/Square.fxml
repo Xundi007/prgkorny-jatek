@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<fx:root xmlns:fx="http://javafx.com/fxml" type="StackPane">
+    <Label text="" fx:id="label" styleClass="square">
+        <minWidth>70</minWidth>
+        <minHeight>70</minHeight>
+    </Label>
+</fx:root>

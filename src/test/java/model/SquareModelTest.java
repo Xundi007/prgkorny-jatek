@@ -1,14 +1,10 @@
-/**
-* Ez a csomag tartalmazza a kétszemélyes logikai játék megvalósítását.
-* A csomagban található a felhasználói felület, az üzleti logika és az XML fájlok (adatbázis) kezelésének megvalósítása.
-*/
-package game;
+package model;
 
 /*
  * #%L
  * prgkorny-jatek
  * %%
- * Copyright (C) 2015 Debreceni Egyetem, Informatikai Kar
+ * Copyright (C) 2016 Debreceni Egyetem, Informatikai Kar
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -25,3 +21,38 @@ package game;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+
+public class SquareModelTest {
+
+    @Before
+    public void setUp() throws Exception {
+
+    }
+
+    @Test
+    public void getRow() throws Exception {
+        assertTrue(true);
+    }
+
+    @Test
+    public void getCol() throws Exception {
+        assertTrue(true);
+    }
+
+    @Test
+    public void setState() throws Exception {
+        assertTrue(true);
+    }
+
+    @Test
+    public void setOwner() throws Exception {
+        assertTrue(true);
+    }
+
+}
