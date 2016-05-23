@@ -2,7 +2,7 @@
 ####Logikai kétszemélyes társasjáték.
 
 ##Játékszabályok:
-- Két mezővel elmozdíthatunk egy saját korongot vizszintesen, függőlegesen vagy átlósan, ha így az üres mezőre kerül.
+- Két mezővel elmozdíthatunk egy saját korongot vízszintesen, függőlegesen vagy átlósan, ha így az üres mezőre kerül.
 - Nyolcszomszédos üres mezőre helyezhetünk egy újabb saját korongot.
 - Korong áthelyezés közben át is lehet ugrani bármelyik korongot.
 - A játékot az nyeri meg, akinek a végén több pontja van.
