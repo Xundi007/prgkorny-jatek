@@ -4,7 +4,7 @@ package model;
  * #%L
  * prgkorny-jatek
  * %%
- * Copyright (C) 2015 Debreceni Egyetem, Informatikai Kar
+ * Copyright (C) 2016 Debreceni Egyetem, Informatikai Kar
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -39,7 +39,6 @@ import java.io.IOException;
 
 /**
  * Perzisztens adattárolás XML fájlban.
- * Az adatbázis alternatívája.
  * A játékosok nevét és eredményét tárolja.
  * Az 'adatbázis' fájl a játék alkönyvtárában keletkezik.
  */
@@ -53,7 +52,7 @@ public class clsXML {
      * Adatok mentése XML fájlba.
      *
      * @param player a játékos neve
-     * @param score  a játékosnak a játék során gyüjtött pontszáma
+     * @param score  a játékosnak a játék során gyűjtött pontszáma
      */
     public static void saveData(String player, int score) {
         try {

@@ -247,6 +247,7 @@ public class GameLogic {
             isGameOver = true;
             controller.gameOver();
             controller.updateScores(score);
+            controller.updateHighScores(HighScore.checkHighScore(score));
         }
     }
 }

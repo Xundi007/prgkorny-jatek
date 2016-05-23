@@ -4,7 +4,7 @@ package model;
  * #%L
  * prgkorny-jatek
  * %%
- * Copyright (C) 2015 Debreceni Egyetem, Informatikai Kar
+ * Copyright (C) 2016 Debreceni Egyetem, Informatikai Kar
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -26,6 +26,7 @@ package model;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -41,38 +42,39 @@ public class clsINI {
     /**
      * A properties objektum (beállítások) mentésének helye.
      */
-    private static String myINIFileName;
+    private static String myConfigFileName;
 
     /**
-     * Az INI fájl meglétének ellenőrzése.
-     * A fájl alapértelmezetten a játék alkönyvtárában van a user home könytár alatt.
+     * A konfigurációs fájl meglétének ellenőrzése.
+     * A fájl alapértelmezetten a játék alkönyvtárában van a user home könyvtár alatt.
      * Ha nem létezik, akkor létrehozza, és beírja a szükséges kulcs-érték párokat.
-     * Ha létezik, akkor betölti az öszzes kulcs-érték párt.
+     * Ha létezik, akkor betölti az összes kulcs-érték párt.
      * Használt kulcsok:
      * EnableLog   - logolás engedélyezése vagy tiltása (alapértelmezés no)
      * logLevel	- logolás szintjének beállítása (alapértelmezés FINE)
      * Player1, és Player2 az aktuális játékosok
      */
-    public static void createINIFile() {
+    public static void createConfigFile() {
         p = new Properties();
-        myINIFileName = System.getProperty("user.home") + "//game//" + "game.xml";
-        File myIniFile = new File(myINIFileName);
-        if (!myIniFile.exists()) {
+        myConfigFileName = System.getProperty("user.home") + "//game//" + "game.xml";
+        File myConfigFile = new File(myConfigFileName);
+        if (!myConfigFile.exists()) {
             try {
                 setKeyValue("EnableLog", "no");
                 setKeyValue("logLevel", "FINE");
                 setKeyValue("Player1", "Player1");
                 setKeyValue("Player2", "Player2");
-                writeINIFileXML();
+                setKeyValue("HighScoreName", "SenkiSe");
+                setKeyValue("HighScorePoint", "0");
+                p.storeToXML(new FileOutputStream(myConfigFileName), "Game settings");
             } catch (Exception ex) {
-                System.out.println("Exception thrown: " + ex);
+                System.out.println("Konfigurációs állomány létrehozása sikertelen: " + ex);
             }
         } else {
             try {
-                p.loadFromXML(new FileInputStream(myINIFileName));
-            } catch (Exception ex) {
-                System.out.println("Exception thrown: " + ex);
-
+                p.loadFromXML(new FileInputStream(myConfigFileName));
+            } catch (IOException ex) {
+                System.out.println("Beállítások olvasása sikertelen! " + ex.toString());
             }
         }
     }
@@ -91,7 +93,7 @@ public class clsINI {
     public static void setPlayers(String p1, String p2) {
         p.setProperty("Player1", p1);
         p.setProperty("Player2", p2);
-        writeINIFileXML();
+        writeSettingsFileXML();
     }
 
     /**
@@ -100,42 +102,61 @@ public class clsINI {
      * @param sParam kiolvasandó kulcs
      * @return a kulcshoz tartozó érték
      */
-    public static String readINIFileXML(String sParam) {
-        try {
-            String sValue;
-            sValue = p.getProperty(sParam);
+    public static String readSettingsFileXML(String sParam) {
+        String sValue;
+        sValue = p.getProperty(sParam);
+        if (sValue != null)
             return sValue;
-        } catch (Exception ex) {
-            System.out.println("Exception thrown: " + ex);
-        }
-        return "";
+        else
+            return "";
     }
 
-    public static void CheckOrCreateFolder() {
-        File file = new File(System.getProperty("user.home") + "//game");
-        if (!file.exists()) {
+    public static String[] readSettingsFileHScore() {
+        String sName, sValue;
+        sName = p.getProperty("HighScoreName");
+        sValue = p.getProperty("HighScorePoint");
+        if (sName == null || sValue == null) {
+            sName = "SenkiSe";
+            sValue = "0";
+        }
+        return (new String[]{sName, sValue});
+    }
+
+    public static void writeSettingsFileHScore(String name, String point) {
+        setKeyValue("HighScoreName", name);
+        setKeyValue("HighScorePoint", point);
+        writeSettingsFileXML();
+    }
+
+    /**
+     * A játék beállításait tárolni fogó mappa létrehozása.
+     * Ha már létezik, nem történik semmi.
+     */
+    public static void createGameFolder() {
+        File gameFolder = new File(System.getProperty("user.home") + "//game");
+        if (!gameFolder.exists()) {
             try {
-                if (file.mkdir()) {
-                    System.out.println("A könyvtár létre lett hozva!");
+                if (gameFolder.mkdir()) {
+                    clsLogger.addLog("I", "A játék könyvtára létre lett hozva.", null);
                 } else {
-                    System.out.println("Nem sikerült létrehozni a könyvtárat!");
+                    throw new SecurityException("gameFolder.mkdir() visszatérési értéke hamis.");
                 }
             } catch (SecurityException se) {
-                System.out.println("Exception thrown: " + se);
+                clsLogger.addLog("S", "Nem sikerült létrehozni a játék könyvtárát!", se);
             }
         } else {
-            System.out.println("A könyvtár már létezik!");
+            clsLogger.addLog("I", "A játék könyvtára már létezik!", null);
         }
     }
 
     /**
      * A beállítások mentése az XML fájlba.
      */
-    public static void writeINIFileXML() {
+    public static void writeSettingsFileXML() {
         try {
-            p.storeToXML(new FileOutputStream(myINIFileName), "Game settings");
-        } catch (Exception ex) {
-            System.out.println("Exception thrown: " + ex);
+            p.storeToXML(new FileOutputStream(myConfigFileName), "Game settings");
+        } catch (IOException io) {
+            clsLogger.addLog("S", "A beállítások kiírása nem sikerült!", io);
         }
     }
 }

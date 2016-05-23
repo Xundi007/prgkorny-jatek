@@ -60,7 +60,7 @@ public class clsLoggerTest {
      */
     @Test
     public void testInitLogger() {
-//		clsINI.createINIFile();
+//		clsINI.createConfigFile();
 //		clsLogger.initLogger();
         assertTrue(true);
     }

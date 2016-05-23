@@ -27,6 +27,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class View extends Application {
@@ -36,6 +37,7 @@ public class View extends Application {
 
         primaryStage.setTitle("2.33. Feladat");
         Scene scene = new Scene(root);
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/view/gameIcon.png")));
 
         primaryStage.setScene(scene);
         root.getStylesheets().add(getClass().getResource("/prt-game.css").toExternalForm());

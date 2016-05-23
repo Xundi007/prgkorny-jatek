@@ -58,6 +58,12 @@
                         <Font name="Arial" size="12.0"/>
                     </font>
                 </Text>
+                <Text fx:id="high_score" layoutX="207.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                      wrappingWidth="207.13671875">
+                    <font>
+                        <Font name="Arial" size="12.0"/>
+                    </font>
+                </Text>
                 <Text fx:id="info" layoutX="20.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0"
                       textAlignment="CENTER" wrappingWidth="395.13671875">
                     <font>

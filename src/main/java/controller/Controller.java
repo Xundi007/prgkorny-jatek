@@ -36,8 +36,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import model.*;
+import model.GameLogic;
+import model.SquareModel;
+import model.clsINI;
+import model.clsLogger;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -62,8 +66,9 @@ public class Controller implements Initializable {
     GridPane board;
 
     @FXML
-    public Text p1_score, p2_score, messages, info;
+    public Text p1_score, p2_score, high_score, messages, info;
     public String strP1 = "p1", strP2 = "p2";
+    public int hScore;
     FadeTransition ft = new FadeTransition(Duration.millis(3000), messages);
 
     Timeline timeline;
@@ -124,6 +129,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void cmdExitButtonAction(ActionEvent e) {
+        clsLogger.closeLogger();
         System.exit(0);
     }
 
@@ -161,16 +167,39 @@ public class Controller implements Initializable {
                             logic.updateGameLogic(square.getCol(), square.getRow());
                         }
                     });
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                } catch (IOException e) {
+                    clsLogger.addLog("S", "A játéktábla felépítése sikertelen.", e);
                 }
             }
         }
     }
 
     public void updateScores(int[] scores) {
-        p1_score.setText(strP1 + " score: " + scores[0]);
-        p2_score.setText(strP2 + " score: " + scores[1]);
+        p1_score.setText(strP1 + " pontszáma: " + scores[0]);
+        p2_score.setText(strP2 + " pontszáma: " + scores[1]);
+    }
+
+    public void setHighScoreText(String name, int score) {
+        high_score.setText(name + " : " + score);
+    }
+
+    public void updateHighScores(String[] tmpHS) {
+        switch (tmpHS[0]) {
+            case "01":
+                setHighScoreText(strP1 + ", " + strP2, Integer.parseInt(tmpHS[1]));
+                clsINI.writeSettingsFileHScore(strP1, tmpHS[1]);
+                break;
+            case "0":
+                setHighScoreText(strP1, Integer.parseInt(tmpHS[1]));
+                clsINI.writeSettingsFileHScore(strP1, tmpHS[1]);
+                break;
+            case "1":
+                setHighScoreText(strP2, Integer.parseInt(tmpHS[1]));
+                clsINI.writeSettingsFileHScore(strP2, tmpHS[1]);
+                break;
+            case "NEM":
+                break;
+        }
     }
 
     public void updateInfo(int currentplayer) {
@@ -194,7 +223,14 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        clsINI.createGameFolder();
+        clsINI.createConfigFile();
+        clsLogger.initLogger();
+        clsLogger.addLog("FT", "A logger elindult.", null);
+
         setUpSquares();
+        clsLogger.addLog("F", "A tábla felépítése megtörtént.", null);
+
         messages.setText("");
         info.setText("A játék elindításához nyomja meg a 'Játék indítása' gombot!");
 
@@ -208,39 +244,21 @@ public class Controller implements Initializable {
         ft.setNode(messages);
         ft.setDuration(Duration.millis(900));
 
-        clsINI.CheckOrCreateFolder();
-        clsINI.createINIFile();
-        clsLogger.initLogger();
-        clsLogger.addLog("F", "createGUI", null);
-
-        try {
-            clsLogger.addLog("I", "Program inditás", null);
-            clsXML.getData();
-            String playerName1, playerName2;
-            playerName1 = clsINI.readINIFileXML("Player1");
-            playerName2 = clsINI.readINIFileXML("Player2");
-            if (playerName1.equals(""))
-                playerName1 = "Player1";
-            if (playerName2.equals(""))
-                playerName2 = "Player2";
-
-            txtPlayerOne.setText(playerName1);
-            txtPlayerTwo.setText(playerName2);
-        } catch (NullPointerException e) {
-            clsLogger.addLog("I", "Nem sikerült betölteni a képet.", null);
-            cmdNewGame.setDisable(true);
-            cmdSetNames.setDisable(true);
-        }
-
-        if (txtPlayerOne.getText().equals(""))
-            txtPlayerOne.setText("Player1");
-        if (txtPlayerTwo.getText().equals(""))
-            txtPlayerTwo.setText("Player2");
-
-        strP1 = txtPlayerOne.getText();
-        strP2 = txtPlayerTwo.getText();
-
-        clsINI.setPlayers(strP1, strP2);
+        clsLogger.addLog("F", "A játékos adatok betöltése elkezdődött...", null);
+        String playerName1, playerName2;
+        String[] highScore = clsINI.readSettingsFileHScore();
+        playerName1 = clsINI.readSettingsFileXML("Player1");
+        playerName2 = clsINI.readSettingsFileXML("Player2");
+        if (playerName1.equals(""))
+            playerName1 = "Player1";
+        if (playerName2.equals(""))
+            playerName2 = "Player2";
+        txtPlayerOne.setText(playerName1);
+        txtPlayerTwo.setText(playerName2);
+        strP1 = playerName1;
+        strP2 = playerName2;
         updateScores(new int[]{0, 0});
+        setHighScoreText(highScore[0], Integer.parseInt(highScore[1]));
+        clsLogger.addLog("F", "A játékos adatok betöltése megtörtént.", null);
     }
 }

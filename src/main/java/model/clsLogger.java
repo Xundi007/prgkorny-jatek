@@ -4,7 +4,7 @@ package model;
  * #%L
  * prgkorny-jatek
  * %%
- * Copyright (C) 2015 Debreceni Egyetem, Informatikai Kar
+ * Copyright (C) 2016 Debreceni Egyetem, Informatikai Kar
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -39,7 +39,7 @@ import java.util.logging.XMLFormatter;
  * A játék minden egyes indításakor új naplófájl keletkezik, az indítás pillanatának időbélyege
  * bekerül a fájl nevébe.
  * A logolás szintje a program konfigurációs fájljában van megadva,
- * csak az ettől magasabb szintü bejegyzéseket tárolja.
+ * csak az ettől magasabb szintű bejegyzéseket tárolja.
  * A naplófájl a játék alkönyvtárában keletkezik.
  */
 public class clsLogger {
@@ -65,14 +65,14 @@ public class clsLogger {
      */
     public static void initLogger() {
         try {
-            String stmp = clsINI.readINIFileXML("EnableLog");
+            String stmp = clsINI.readSettingsFileXML("EnableLog");
             Date date = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
             if (stmp.equals("yes") || stmp.equals("")) {
                 enableLog = true;
             }
             fh = new FileHandler(System.getProperty("user.home") + "//game//" + "game" + df.format(date) + ".log");
-            stmp = clsINI.readINIFileXML("logLevel");
+            stmp = clsINI.readSettingsFileXML("logLevel");
             if (stmp.equals(""))
                 stmp = "INFO";
             switch (stmp) {
@@ -100,8 +100,8 @@ public class clsLogger {
             }
             fh.setFormatter(new XMLFormatter());
             gameLogger.addHandler(fh);
-        } catch (IOException | SecurityException e) {
-//		  System.out.println("Exception thrown: " + e);
+        } catch (IOException e) {
+            System.out.println("Nem sikerült a log fájlt létrehozni, a logolást elindítani: " + e);
         }
     }
 
@@ -112,8 +112,8 @@ public class clsLogger {
         try {
             fh.flush();
             fh.close();
-        } catch (Exception e) {
-//		  System.out.println("Exception thrown: " + e);
+        } catch (SecurityException e) {
+            System.out.println("Nem sikerült a log fájlt bezárni: " + e);
         }
     }
 
@@ -126,34 +126,30 @@ public class clsLogger {
      */
     public static void addLog(String sLevel, String logMsg, Object ex) {
         if (enableLog) {
-            try {
-                switch (sLevel) {
-                    case "FT":
-                        gameLogger.finest(logMsg);
-                        break;
-                    case "FR":
-                        gameLogger.finer(logMsg);
-                        break;
-                    case "F":
-                        gameLogger.fine(logMsg);
-                        break;
-                    case "I":
-                        gameLogger.log(Level.INFO, logMsg);
-                        break;
-                    case "C":
-                        gameLogger.log(Level.CONFIG, logMsg);
-                        break;
-                    case "W":
-                        gameLogger.log(Level.WARNING, logMsg, ex);
-                        break;
-                    case "S":
-                        gameLogger.log(Level.SEVERE, logMsg, ex);
-                        break;
-                }
-                fh.flush();
-            } catch (Exception e) {
-//			  System.out.println("Exception thrown: " + e);
+            switch (sLevel) {
+                case "FT":
+                    gameLogger.finest(logMsg);
+                    break;
+                case "FR":
+                    gameLogger.finer(logMsg);
+                    break;
+                case "F":
+                    gameLogger.fine(logMsg);
+                    break;
+                case "I":
+                    gameLogger.log(Level.INFO, logMsg);
+                    break;
+                case "C":
+                    gameLogger.log(Level.CONFIG, logMsg);
+                    break;
+                case "W":
+                    gameLogger.log(Level.WARNING, logMsg, ex);
+                    break;
+                case "S":
+                    gameLogger.log(Level.SEVERE, logMsg, ex);
+                    break;
             }
+            fh.flush();
         }
     }
 }
