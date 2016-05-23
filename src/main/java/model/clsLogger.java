@@ -64,56 +64,61 @@ public class clsLogger {
      * így lehetőség nyílik az igényeknek megfelelő naplózás beállítására.
      */
     public static void initLogger() {
-        try {
-            String stmp = clsINI.readSettingsFileXML("EnableLog");
-            Date date = new Date();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-            if (stmp.equals("yes") || stmp.equals("")) {
-                enableLog = true;
-            }
-            fh = new FileHandler(System.getProperty("user.home") + "//game//" + "game" + df.format(date) + ".log");
-            stmp = clsINI.readSettingsFileXML("logLevel");
-            if (stmp.equals(""))
-                stmp = "INFO";
-            switch (stmp) {
-                case "FINEST":
-                    gameLogger.setLevel(Level.FINEST);
-                    break;
-                case "FINER":
-                    gameLogger.setLevel(Level.FINER);
-                    break;
-                case "FINE":
-                    gameLogger.setLevel(Level.FINE);
-                    break;
-                case "INFO":
-                    gameLogger.setLevel(Level.INFO);
-                    break;
-                case "CONFIG":
-                    gameLogger.setLevel(Level.CONFIG);
-                    break;
-                case "WARNING":
-                    gameLogger.setLevel(Level.WARNING);
-                    break;
-                case "SEVERE":
-                    gameLogger.setLevel(Level.SEVERE);
-                    break;
-            }
-            fh.setFormatter(new XMLFormatter());
-            gameLogger.addHandler(fh);
-        } catch (IOException e) {
-            System.out.println("Nem sikerült a log fájlt létrehozni, a logolást elindítani: " + e);
+        String stmp = clsINI.readSettingsFileXML("EnableLog");
+        Date date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        if (stmp.equals("yes") || stmp.equals("")) {
+            enableLog = true;
         }
+        if (enableLog) {
+            try {
+                fh = new FileHandler(System.getProperty("user.home") + "//game//" + "game" + df.format(date) + ".log");
+                stmp = clsINI.readSettingsFileXML("logLevel");
+                if (stmp.equals(""))
+                    stmp = "INFO";
+                switch (stmp) {
+                    case "FINEST":
+                        gameLogger.setLevel(Level.FINEST);
+                        break;
+                    case "FINER":
+                        gameLogger.setLevel(Level.FINER);
+                        break;
+                    case "FINE":
+                        gameLogger.setLevel(Level.FINE);
+                        break;
+                    case "INFO":
+                        gameLogger.setLevel(Level.INFO);
+                        break;
+                    case "CONFIG":
+                        gameLogger.setLevel(Level.CONFIG);
+                        break;
+                    case "WARNING":
+                        gameLogger.setLevel(Level.WARNING);
+                        break;
+                    case "SEVERE":
+                        gameLogger.setLevel(Level.SEVERE);
+                        break;
+                }
+                fh.setFormatter(new XMLFormatter());
+                gameLogger.addHandler(fh);
+            } catch (IOException e) {
+                System.out.println("Nem sikerült a log fájlt létrehozni: " + e);
+            }
+        }
+
     }
 
     /**
      * Naplófájl lezárása.
      */
     public static void closeLogger() {
-        try {
-            fh.flush();
-            fh.close();
-        } catch (SecurityException e) {
-            System.out.println("Nem sikerült a log fájlt bezárni: " + e);
+        if(enableLog) {
+            try {
+                fh.flush();
+                fh.close();
+            } catch (SecurityException e) {
+                System.out.println("Nem sikerült a log fájlt bezárni: " + e);
+            }
         }
     }
 
