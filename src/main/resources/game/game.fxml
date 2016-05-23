@@ -19,6 +19,12 @@
                     GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" GridPane.rowSpan="2" GridPane.valignment="CENTER"
                     GridPane.vgrow="ALWAYS">
             <children>
+                <Button fx:id="cmdHistory" layoutX="360.0" layoutY="152.0" mnemonicParsing="false"
+                        onAction="#cmdHistoryButtonAction" prefHeight="20.0" prefWidth="40.0" text="Er.">
+                    <font>
+                        <Font size="12.0"/>
+                    </font>
+                </Button>
                 <Button fx:id="cmdNewGame" layoutX="431.0" layoutY="88.0" mnemonicParsing="false"
                         onAction="#cmdNewGameButtonAction" prefHeight="37.0" prefWidth="146.0" text="Játék indítása">
                     <font>

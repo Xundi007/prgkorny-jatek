@@ -248,6 +248,8 @@ public class GameLogic {
             controller.gameOver();
             controller.updateScores(score);
             controller.updateHighScores(HighScore.checkHighScore(score));
+            clsXML.saveData(controller.strP1, score[0]);
+            clsXML.saveData(controller.strP2, score[1]);
         }
     }
 }

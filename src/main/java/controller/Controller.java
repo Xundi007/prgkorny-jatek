@@ -30,16 +30,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import model.GameLogic;
-import model.SquareModel;
-import model.clsINI;
-import model.clsLogger;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,6 +56,9 @@ public class Controller implements Initializable {
 
     @FXML
     Button cmdExit;
+
+    @FXML
+    Button cmdHistory;
 
     @FXML
     TextField txtPlayerOne;
@@ -91,6 +95,29 @@ public class Controller implements Initializable {
         updateScores(new int[]{0, 0});
     }
 
+    @FXML
+    public void cmdHistoryButtonAction(ActionEvent e) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initStyle(StageStyle.UTILITY);
+        alert.setTitle("Eredmények");
+        alert.setHeaderText("Az eddig lejátszott játszmák eredményei.");
+        TextArea textArea = new TextArea(clsXML.getData());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(textArea, 0, 0);
+
+        alert.getDialogPane().setContent(expContent);
+        alert.showAndWait();
+    }
+
     void startGame() {
         logic.isStarted = true;
     }
@@ -100,6 +127,8 @@ public class Controller implements Initializable {
         cmdSetNames.setDisable(false);
         txtPlayerOne.setDisable(false);
         txtPlayerTwo.setDisable(false);
+        cmdHistory.setDisable(false);
+        clsLogger.addLog("F", "A játék véget ért.", null);
     }
 
     @FXML
@@ -109,6 +138,7 @@ public class Controller implements Initializable {
             cmdSetNames.setDisable(true);
             txtPlayerOne.setDisable(true);
             txtPlayerTwo.setDisable(true);
+            cmdHistory.setDisable(true);
             if (logic.isGameOver) {
                 setUpSquares();
             }
@@ -118,6 +148,7 @@ public class Controller implements Initializable {
             cmdSetNames.setDisable(false);
             txtPlayerOne.setDisable(false);
             txtPlayerTwo.setDisable(false);
+            cmdHistory.setDisable(false);
             cmdNewGame.setText("Új játék");
         }
 

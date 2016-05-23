@@ -29,6 +29,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -46,7 +47,7 @@ public class clsXML {
     /**
      * A konfigurációs fájl teljes elérési útja.
      */
-    static String url = System.getProperty("user.home") + "//game//" + "gameLog.xml";
+    static String url = System.getProperty("user.home") + "//game//" + "HighScore.xml";
 
     /**
      * Adatok mentése XML fájlba.
@@ -59,7 +60,7 @@ public class clsXML {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             File xmlFile = new File(url);
-            if (!xmlFile.exists()) {
+            if (!xmlFile.exists()) {    //Ha a fájl nem létezik.
                 Document doc = dBuilder.newDocument();
                 Element rootElement = doc.createElement("Game");
                 doc.appendChild(rootElement);
@@ -77,14 +78,15 @@ public class clsXML {
 
                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
                 Transformer transformer = transformerFactory.newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
                 DOMSource source = new DOMSource(doc);
                 StreamResult result = new StreamResult(new File(url));
                 transformer.transform(source, result);
-            } else {
+            } else {    //Ha már létezik a fájl.
                 Document doc = dBuilder.parse(xmlFile);
                 NodeList list = doc.getElementsByTagName("Players");
                 int nodeCount = list.getLength() + 1;
-//				System.out.println(nodeCount);
                 Element participants = doc.createElement("Players");
                 Element rootElement = doc.getDocumentElement();
                 rootElement.appendChild(participants);
@@ -100,19 +102,22 @@ public class clsXML {
 
                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
                 Transformer transformer = transformerFactory.newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
                 DOMSource source = new DOMSource(doc);
                 StreamResult result = new StreamResult(new File(url));
                 transformer.transform(source, result);
             }
         } catch (ParserConfigurationException | DOMException | TransformerException | SAXException | IOException e) {
-            clsLogger.addLog("W", "Probléma adódott", e);
+            clsLogger.addLog("W", "Probléma adódott a pontszám lista elmentésekor.", e);
         }
     }
 
     /**
      * A játékosok és pontszámaik listázása.
      */
-    public static void getData() {
+    public static String getData() {
+        String data = "Még semmi.    _@/\"";
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -121,20 +126,25 @@ public class clsXML {
                 Document doc = dBuilder.parse(xmlFile);
                 doc.getDocumentElement().normalize();
                 NodeList nList = doc.getElementsByTagName("Players");
+                String tempStr ="";
                 for (int temp = 0; temp < nList.getLength(); temp++) {
                     Node nNode = nList.item(temp);
                     clsLogger.addLog("FT", "Current Element :" + nNode.getNodeName(), null);
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element eElement = (Element) nNode;
-                        String msg = "participants id : " + eElement.getAttribute("id");
-                        msg += " Player's Name : " + eElement.getElementsByTagName("playerName").item(0).getTextContent();
-                        msg += " Score : " + eElement.getElementsByTagName("score").item(0).getTextContent();
+                        String msg = "id : " + eElement.getAttribute("id");
+                        msg += " Játékos neve : " + eElement.getElementsByTagName("playerName").item(0).getTextContent();
+                        msg += " pontszám : " + eElement.getElementsByTagName("score").item(0).getTextContent();
+                        tempStr += msg;
                         clsLogger.addLog("FT", msg, null);
                     }
+                    tempStr += "\n";
                 }
+                data = tempStr;
             }
         } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
-            clsLogger.addLog("W", "Probléma adódott", e);
+            clsLogger.addLog("W", "Probléma adódott a pontszám lista lekérdezésekor.", e);
         }
+    return data;
     }
 }
