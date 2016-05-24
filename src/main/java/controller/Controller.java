@@ -100,7 +100,7 @@ public class Controller implements Initializable {
         alert.initStyle(StageStyle.UTILITY);
         alert.setTitle("Eredmények");
         alert.setHeaderText("Az eddig lejátszott játszmák eredményei.");
-        TextArea textArea = new TextArea(HistoryXML.getData());
+        TextArea textArea = new TextArea(HistoryyyyyXML.getData());
         textArea.setEditable(false);
         textArea.setWrapText(true);
 

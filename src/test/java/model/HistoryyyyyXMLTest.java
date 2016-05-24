@@ -27,12 +27,12 @@ import org.junit.*;
 
 import static org.junit.Assert.assertTrue;
 
-public class HistoryXMLTest {
+public class HistoryyyyyXMLTest {
 
     String player;
     int score;
 
-    public HistoryXMLTest() {
+    public HistoryyyyyXMLTest() {
     }
 
     @BeforeClass
@@ -54,20 +54,20 @@ public class HistoryXMLTest {
     }
 
     /**
-     * A HistoryXML osztály saveData metódusának tesztje.
+     * A HistoryyyyyXML osztály saveData metódusának tesztje.
      */
     @Test
     public void testSaveData() {
-        HistoryXML.saveData(player, score);
+        HistoryyyyyXML.saveData(player, score);
         assertTrue(true);
     }
 
     /**
-     * A HistoryXML osztály getData metódusának tesztje.
+     * A HistoryyyyyXML osztály getData metódusának tesztje.
      */
     @Test
     public void testGetData() {
-        HistoryXML.getData();
+        HistoryyyyyXML.getData();
         assertTrue(true);
     }
 
