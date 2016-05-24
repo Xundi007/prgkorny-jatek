@@ -26,15 +26,14 @@ package controller;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
@@ -72,7 +71,7 @@ public class Controller implements Initializable {
     @FXML
     public Text p1_score, p2_score, high_score, messages, info;
     public String strP1 = "p1", strP2 = "p2";
-    FadeTransition ft = new FadeTransition(Duration.millis(3000), messages);
+    FadeTransition ft;
 
     Timeline timeline;
     public ArrayList<Square> squares;
@@ -193,12 +192,7 @@ public class Controller implements Initializable {
                         sm.setOwner(1);
                     }
 
-                    square.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            logic.updateGameLogic(square.getCol(), square.getRow());
-                        }
-                    });
+                    square.setOnMouseClicked(mouseE -> logic.updateGameLogic(square.getCol(), square.getRow()));
                 } catch (IOException e) {
                     GameLogger.addLog("S", "A játéktábla felépítése sikertelen.", e);
                 }
@@ -234,8 +228,8 @@ public class Controller implements Initializable {
         }
     }
 
-    public void updateInfo(int currentplayer) {
-        if (currentplayer == 0) {
+    public void updateInfo(int currentPlayer) {
+        if (currentPlayer == 0) {
             info.setText(strP1 + " következik");
         } else {
             info.setText(strP2 + " következik");
@@ -246,12 +240,46 @@ public class Controller implements Initializable {
         info.setText(str);
     }
 
-    public void msg(String msg) {
-        timeline.stop();
-        ft.stop();
-        messages.setText(msg);
-        timeline.play();
+    boolean isActive = false;
+
+    class InfoMsg implements Runnable {
+        String tMsg;
+
+        public InfoMsg(String msg) {
+            tMsg = msg;
+        }
+
+        public void run() {
+            messages.setText(tMsg);
+            if (timeline != null)
+                timeline.stop();
+            timeline = new Timeline(new KeyFrame(
+                    Duration.millis(2000),
+                    actionE -> {
+                        if (!isActive) {
+                            isActive = true;
+                            ft = new FadeTransition(Duration.millis(900), messages);
+                            ft.setFromValue(1.0);
+                            ft.setToValue(0.0);
+                            ft.play();
+                        }
+                    }
+            ));
+            timeline.play();
+        }
     }
+
+    public void msg(String msg) {
+        if (ft != null) {
+            ft.stop();
+            messages.setOpacity(100);
+        }
+        isActive = false;
+        infoMsg = new InfoMsg(msg);
+        Platform.runLater(infoMsg);
+    }
+
+    InfoMsg infoMsg;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -265,16 +293,6 @@ public class Controller implements Initializable {
 
         messages.setText("");
         info.setText("A játék elindításához nyomja meg a 'Játék indítása' gombot!");
-
-        timeline = new Timeline(new KeyFrame(
-                Duration.millis(1500),
-                ar -> ft.play()
-        ));
-        ft.setFromValue(1.0);
-        ft.setToValue(0.0);
-        ft.setAutoReverse(true);
-        ft.setNode(messages);
-        ft.setDuration(Duration.millis(900));
 
         GameLogger.addLog("F", "A játékos adatok betöltése elkezdődött...", null);
         String playerName1, playerName2;
