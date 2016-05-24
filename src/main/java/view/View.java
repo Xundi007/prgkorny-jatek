@@ -33,14 +33,14 @@ import javafx.stage.Stage;
 public class View extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/game/game.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/game.fxml"));
 
         primaryStage.setTitle("2.33. Feladat");
         Scene scene = new Scene(root);
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/view/gameIcon.png")));
 
         primaryStage.setScene(scene);
-        root.getStylesheets().add(getClass().getResource("/prt-game.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource("/view/prt-game.css").toExternalForm());
         primaryStage.setResizable(false);
         primaryStage.show();
     }

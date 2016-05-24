@@ -47,7 +47,7 @@ public class clsXML {
     /**
      * A konfigurációs fájl teljes elérési útja.
      */
-    static String url = System.getProperty("user.home") + "//game//" + "HighScore.xml";
+    static String url = System.getProperty("user.home") + "//game//" + "History.xml";
 
     /**
      * Adatok mentése XML fájlba.
@@ -117,6 +117,7 @@ public class clsXML {
      * A játékosok és pontszámaik listázása.
      */
     public static String getData() {
+        clsLogger.addLog("FT", "Eredmények kiolvasása elkezdődött...", null);
         String data = "Még semmi.    _@/\"";
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -129,19 +130,18 @@ public class clsXML {
                 String tempStr ="";
                 for (int temp = 0; temp < nList.getLength(); temp++) {
                     Node nNode = nList.item(temp);
-                    clsLogger.addLog("FT", "Current Element :" + nNode.getNodeName(), null);
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element eElement = (Element) nNode;
                         String msg = "id : " + eElement.getAttribute("id");
                         msg += " Játékos neve : " + eElement.getElementsByTagName("playerName").item(0).getTextContent();
                         msg += " pontszám : " + eElement.getElementsByTagName("score").item(0).getTextContent();
                         tempStr += msg;
-                        clsLogger.addLog("FT", msg, null);
                     }
                     tempStr += "\n";
                 }
                 data = tempStr;
             }
+            clsLogger.addLog("FT", "Eredmények kiolvasása sikeresen megtörtént.", null);
         } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
             clsLogger.addLog("W", "Probléma adódott a pontszám lista lekérdezésekor.", e);
         }

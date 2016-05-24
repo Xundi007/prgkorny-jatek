@@ -133,6 +133,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void cmdNewGameButtonAction(ActionEvent e) {
+        clsLogger.addLog("F", "Új játék indul.", null);
         if (cmdNewGame.getText().equals("Játék indítása")) {
             cmdNewGame.setText("Új játék");
             cmdSetNames.setDisable(true);
@@ -160,6 +161,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void cmdExitButtonAction(ActionEvent e) {
+        clsLogger.addLog("F", "A játék kilép.", null);
         clsLogger.closeLogger();
         System.exit(0);
     }

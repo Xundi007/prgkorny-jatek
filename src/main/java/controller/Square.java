@@ -60,7 +60,7 @@ public class Square extends StackPane {
     }
 
     public Square(int col, int row) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/game/Square.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Square.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         loader.load();
