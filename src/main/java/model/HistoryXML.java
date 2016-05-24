@@ -43,7 +43,7 @@ import java.io.IOException;
  * A játékosok nevét és eredményét tárolja.
  * Az 'adatbázis' fájl a játék alkönyvtárában keletkezik.
  */
-public class HistoryyyyyXML {
+public class HistoryXML {
     /**
      * A konfigurációs fájl teljes elérési útja.
      */
