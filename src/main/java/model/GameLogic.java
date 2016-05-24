@@ -70,7 +70,13 @@ public class GameLogic {
         if (!isStarted) return;
 
         SquareModel s = getSquareModel(col, row);
+        /*
+        * Ha még nem volt kijelölve korong.
+        */
         if (!isSelected) {
+            /*
+            * A jelenlegi játékosé az a korong, amire a kattintás érkezett.
+            */
             if (currentPlayer == s.owner) {
                 selectedModel = s;
                 selected = getSquare(s.getCol(), s.getRow());
@@ -78,17 +84,26 @@ public class GameLogic {
                 isSelected = true;
             }
         } else {
-            // Deselect the currently selected
+            /*
+            * Ha már a korong ki lett jelölve és újra rákattintunk.
+            * A kijelölt korong kijelölésének eltüntetése.
+            * (A kijelölt korongunkra kattintunk.)
+            */
             if (s == selectedModel) {
                 selected.select(false);
                 isSelected = false;
             }
-            // Check if the move is valid
+            /*
+            * A lépés érvényességének vizsgálata.
+            * (Szabad(üres) korongra kattintunk.)
+            */
             else if (s.isNeutral) {
                 int deltaRow = Math.abs(s.getRow() - selectedModel.getRow());
                 int deltaCol = Math.abs(s.getCol() - selectedModel.getCol());
 
-                // Make a copy
+                /*
+                * Új korong lehelyezése.
+                */
                 if (deltaRow < 2 && deltaCol < 2 && s.state != 3) {
                     turnOver(row, col, 1);
                     isSelected = false;
@@ -98,8 +113,11 @@ public class GameLogic {
                     getSquare(s.getCol(), s.getRow()).setOwner(currentPlayer);
                     nextTurn();
                 }
-                // Jump
-                else if ((deltaRow == 2) && (deltaCol == 2) || (deltaRow == 0) && (deltaCol == 2) || (deltaRow == 2) && (deltaCol == 0)) {
+                /*
+                * A korong áthelyezése.
+                */
+                else if ((deltaRow == 2) && (deltaCol == 2) || (deltaRow == 0) && (deltaCol == 2) || (deltaRow == 2)
+                        && (deltaCol == 0)) {
                     if (s.state != 3) {
                         turnOver(row, col, 0);
                         isSelected = false;
@@ -112,12 +130,18 @@ public class GameLogic {
                         nextTurn();
                     }
                 }
-                // Invalid move
+                /*
+                * A lépés érvénytelen.
+                * (A korongot se nem tudjuk áthelyezni, se nem tudunk mellé újat rakni.)
+                */
                 else {
                     controller.msg("Érvénytelen lépés");
                 }
             }
-            // Other player's square of offline square
+            /*
+            * A lépés érvénytelen.
+            * (Az ellenfél korongjára kattintottunk.)
+            */
             else {
                 controller.msg("Érvénytelen lépés");
             }
@@ -137,15 +161,23 @@ public class GameLogic {
         if (sRow == 5) rTo = 5;
         if (sCol == 5) cTo = 5;
 
-        // 1 distance check
+        /*
+        * Lépési lehetőség ellenőrzés:
+        *   A korongtól 1 távolságra. (Plusz korong lerakás.)
+        */
         for (int row = rFrom; row <= rTo; row++) {
             for (int col = cFrom; col <= cTo; col++) {
-                if (row == sRow && col == sCol) continue;
-                if (getSquareModel(col, row).isNeutral) return true;
+                if (row == sRow && col == sCol)
+                    continue;
+                if (getSquareModel(col, row).isNeutral)
+                    return true;
             }
         }
 
-        // 2 distance check
+        /*
+        * Lépési lehetőség ellenőrzés:
+        *   A korongtól 2 távolságra. (A korong áthelyezése.)
+        */
         int up = sRow - 2, down = sRow + 2, left = sCol - 2, right = sCol + 2;
 
         boolean isUp = up >= 0;
@@ -154,28 +186,36 @@ public class GameLogic {
         boolean isRight = right <= 5;
 
         if (isUp)
-            if (getSquareModel(sCol, up).isNeutral) return true;
+            if (getSquareModel(sCol, up).isNeutral)
+                return true;
 
         if (isDown)
-            if (getSquareModel(sCol, down).isNeutral) return true;
+            if (getSquareModel(sCol, down).isNeutral)
+                return true;
 
         if (isLeft)
-            if (getSquareModel(left, sRow).isNeutral) return true;
+            if (getSquareModel(left, sRow).isNeutral)
+                return true;
 
         if (isRight)
-            if (getSquareModel(right, sRow).isNeutral) return true;
+            if (getSquareModel(right, sRow).isNeutral)
+                return true;
 
         if (isUp && isLeft)
-            if (getSquareModel(left, up).isNeutral) return true;
+            if (getSquareModel(left, up).isNeutral)
+                return true;
 
         if (isUp && isRight)
-            if (getSquareModel(right, up).isNeutral) return true;
+            if (getSquareModel(right, up).isNeutral)
+                return true;
 
         if (isDown && isLeft)
-            if (getSquareModel(left, down).isNeutral) return true;
+            if (getSquareModel(left, down).isNeutral)
+                return true;
 
         if (isDown && isRight)
-            if (getSquareModel(right, down).isNeutral) return true;
+            if (getSquareModel(right, down).isNeutral)
+                return true;
 
         return false;
     }
@@ -198,7 +238,8 @@ public class GameLogic {
         * Pontozási szabály:
         *   Lerakott saját korongonként 1 pont
         */
-        if (mode == 1) score[currentPlayer]++;
+        if (mode == 1)
+            score[currentPlayer]++;
 
         rFrom = sRow - 1;
         rTo = sRow + 1;
@@ -248,8 +289,8 @@ public class GameLogic {
             controller.gameOver();
             controller.updateScores(score);
             controller.updateHighScores(HighScore.checkHighScore(score));
-            clsXML.saveData(controller.strP1, score[0]);
-            clsXML.saveData(controller.strP2, score[1]);
+            HistoryXML.saveData(controller.strP1, score[0]);
+            HistoryXML.saveData(controller.strP2, score[1]);
         }
     }
 }

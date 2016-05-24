@@ -72,7 +72,6 @@ public class Controller implements Initializable {
     @FXML
     public Text p1_score, p2_score, high_score, messages, info;
     public String strP1 = "p1", strP2 = "p2";
-    public int hScore;
     FadeTransition ft = new FadeTransition(Duration.millis(3000), messages);
 
     Timeline timeline;
@@ -91,7 +90,7 @@ public class Controller implements Initializable {
         strP1 = txtPlayerOne.getText();
         strP2 = txtPlayerTwo.getText();
 
-        clsINI.setPlayers(strP1, strP2);
+        SettingsXML.setPlayers(strP1, strP2);
         updateScores(new int[]{0, 0});
     }
 
@@ -101,7 +100,7 @@ public class Controller implements Initializable {
         alert.initStyle(StageStyle.UTILITY);
         alert.setTitle("Eredmények");
         alert.setHeaderText("Az eddig lejátszott játszmák eredményei.");
-        TextArea textArea = new TextArea(clsXML.getData());
+        TextArea textArea = new TextArea(HistoryXML.getData());
         textArea.setEditable(false);
         textArea.setWrapText(true);
 
@@ -128,12 +127,12 @@ public class Controller implements Initializable {
         txtPlayerOne.setDisable(false);
         txtPlayerTwo.setDisable(false);
         cmdHistory.setDisable(false);
-        clsLogger.addLog("F", "A játék véget ért.", null);
+        GameLogger.addLog("F", "A játék véget ért.", null);
     }
 
     @FXML
     public void cmdNewGameButtonAction(ActionEvent e) {
-        clsLogger.addLog("F", "Új játék indul.", null);
+        GameLogger.addLog("F", "Új játék indul.", null);
         if (cmdNewGame.getText().equals("Játék indítása")) {
             cmdNewGame.setText("Új játék");
             cmdSetNames.setDisable(true);
@@ -161,8 +160,8 @@ public class Controller implements Initializable {
 
     @FXML
     public void cmdExitButtonAction(ActionEvent e) {
-        clsLogger.addLog("F", "A játék kilép.", null);
-        clsLogger.closeLogger();
+        GameLogger.addLog("F", "A játék kilép.", null);
+        GameLogger.closeLogger();
         System.exit(0);
     }
 
@@ -201,7 +200,7 @@ public class Controller implements Initializable {
                         }
                     });
                 } catch (IOException e) {
-                    clsLogger.addLog("S", "A játéktábla felépítése sikertelen.", e);
+                    GameLogger.addLog("S", "A játéktábla felépítése sikertelen.", e);
                 }
             }
         }
@@ -220,15 +219,15 @@ public class Controller implements Initializable {
         switch (tmpHS[0]) {
             case "01":
                 setHighScoreText(strP1 + ", " + strP2, Integer.parseInt(tmpHS[1]));
-                clsINI.writeSettingsFileHScore(strP1, tmpHS[1]);
+                SettingsXML.writeSettingsFileHScore(strP1, tmpHS[1]);
                 break;
             case "0":
                 setHighScoreText(strP1, Integer.parseInt(tmpHS[1]));
-                clsINI.writeSettingsFileHScore(strP1, tmpHS[1]);
+                SettingsXML.writeSettingsFileHScore(strP1, tmpHS[1]);
                 break;
             case "1":
                 setHighScoreText(strP2, Integer.parseInt(tmpHS[1]));
-                clsINI.writeSettingsFileHScore(strP2, tmpHS[1]);
+                SettingsXML.writeSettingsFileHScore(strP2, tmpHS[1]);
                 break;
             case "NEM":
                 break;
@@ -256,13 +255,13 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        clsINI.createGameFolder();
-        clsINI.createConfigFile();
-        clsLogger.initLogger();
-        clsLogger.addLog("FT", "A logger elindult.", null);
+        SettingsXML.createGameFolder();
+        SettingsXML.createConfigFile();
+        GameLogger.initLogger();
+        GameLogger.addLog("FT", "A logger elindult.", null);
 
         setUpSquares();
-        clsLogger.addLog("F", "A tábla felépítése megtörtént.", null);
+        GameLogger.addLog("F", "A tábla felépítése megtörtént.", null);
 
         messages.setText("");
         info.setText("A játék elindításához nyomja meg a 'Játék indítása' gombot!");
@@ -277,11 +276,11 @@ public class Controller implements Initializable {
         ft.setNode(messages);
         ft.setDuration(Duration.millis(900));
 
-        clsLogger.addLog("F", "A játékos adatok betöltése elkezdődött...", null);
+        GameLogger.addLog("F", "A játékos adatok betöltése elkezdődött...", null);
         String playerName1, playerName2;
-        String[] highScore = clsINI.readSettingsFileHScore();
-        playerName1 = clsINI.readSettingsFileXML("Player1");
-        playerName2 = clsINI.readSettingsFileXML("Player2");
+        String[] highScore = SettingsXML.readSettingsFileHScore();
+        playerName1 = SettingsXML.readSettingsFileXML("Player1");
+        playerName2 = SettingsXML.readSettingsFileXML("Player2");
         if (playerName1.equals(""))
             playerName1 = "Player1";
         if (playerName2.equals(""))
@@ -292,6 +291,6 @@ public class Controller implements Initializable {
         strP2 = playerName2;
         updateScores(new int[]{0, 0});
         setHighScoreText(highScore[0], Integer.parseInt(highScore[1]));
-        clsLogger.addLog("F", "A játékos adatok betöltése megtörtént.", null);
+        GameLogger.addLog("F", "A játékos adatok betöltése megtörtént.", null);
     }
 }

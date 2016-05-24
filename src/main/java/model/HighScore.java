@@ -26,7 +26,7 @@ package model;
 public class HighScore {
 
     public static String[] checkHighScore(int[] score) {
-        String[] highScore = clsINI.readSettingsFileHScore();
+        String[] highScore = SettingsXML.readSettingsFileHScore();
         String[] new_HS = new String[]{"NEM", ""};
         if (score[0] == score[1]) {
             if (score[0] > Integer.parseInt(highScore[1])) {
@@ -46,6 +46,4 @@ public class HighScore {
         }
         return new_HS;
     }
-
-
 }
