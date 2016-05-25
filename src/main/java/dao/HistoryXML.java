@@ -1,4 +1,4 @@
-package model;
+package dao;
 
 /*
  * #%L
@@ -23,6 +23,8 @@ package model;
  */
 
 
+
+import model.GameLogger;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -42,12 +44,38 @@ import java.io.IOException;
  * Perzisztens adattárolás XML fájlban.
  * A játékosok nevét és eredményét tárolja.
  * Az 'adatbázis' fájl a játék alkönyvtárában keletkezik.
+ * Singleton megvalósítás.
  */
 public class HistoryXML {
+    private static HistoryXML instance = new HistoryXML();
+
+    protected HistoryXML() {
+    }
+
+    public static HistoryXML getInstance() {
+        if (instance == null) {
+
+            synchronized (HistoryXML.class) {
+                if (instance == null) {
+                    instance = new HistoryXML();
+                }
+            }
+        }
+        return instance;
+    }
+
     /**
      * A konfigurációs fájl teljes elérési útja.
      */
-    static String url = System.getProperty("user.home") + "//game//" + "History.xml";
+    private String url = System.getProperty("user.home") + "//game//" + "History.xml";
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     /**
      * Adatok mentése XML fájlba.
@@ -55,7 +83,7 @@ public class HistoryXML {
      * @param player a játékos neve
      * @param score  a játékosnak a játék során gyűjtött pontszáma
      */
-    public static void saveData(String player, int score) {
+    public void saveData(String player, int score) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -116,7 +144,7 @@ public class HistoryXML {
     /**
      * A játékosok és pontszámaik listázása.
      */
-    public static String getData() {
+    public String getData() {
         GameLogger.addLog("FT", "Eredmények kiolvasása elkezdődött...", null);
         String data = "Még semmi.    _@/\"";
         try {
@@ -127,7 +155,7 @@ public class HistoryXML {
                 Document doc = dBuilder.parse(xmlFile);
                 doc.getDocumentElement().normalize();
                 NodeList nList = doc.getElementsByTagName("Players");
-                String tempStr ="";
+                String tempStr = "";
                 for (int temp = 0; temp < nList.getLength(); temp++) {
                     Node nNode = nList.item(temp);
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -145,6 +173,6 @@ public class HistoryXML {
         } catch (ParserConfigurationException | SAXException | IOException | DOMException e) {
             GameLogger.addLog("W", "Probléma adódott a pontszám lista lekérdezésekor.", e);
         }
-    return data;
+        return data;
     }
 }

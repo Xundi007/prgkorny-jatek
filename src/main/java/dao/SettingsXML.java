@@ -1,4 +1,4 @@
-package model;
+package dao;
 
 /*
  * #%L
@@ -23,6 +23,8 @@ package model;
  */
 
 
+import model.GameLogger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -32,17 +34,35 @@ import java.util.Properties;
 /**
  * XML formátumú properties fájl kezelésére szolgáló osztály.
  * A game.xml konfigurációs fájl a program beállításait tartalmazza.
+ * Singleton megvalósítás.
  */
 public class SettingsXML {
+    private static SettingsXML instance = new SettingsXML();
+
+    protected SettingsXML() {
+    }
+
+    public static SettingsXML getInstance() {
+        if (instance == null) {
+
+            synchronized (SettingsXML.class) {
+                if (instance == null) {
+                    instance = new SettingsXML();
+                }
+            }
+        }
+        return instance;
+    }
+
     /**
      * properties objektum, a program beállításait tartalmazza.
      */
-    private static Properties p;
+    private Properties p;
 
     /**
      * A properties objektum (beállítások) mentésének helye.
      */
-    private static String myConfigFileName;
+    private String myConfigFileName;
 
     /**
      * A konfigurációs fájl meglétének ellenőrzése.
@@ -54,7 +74,7 @@ public class SettingsXML {
      * logLevel	- logolás szintjének beállítása (alapértelmezés FINE)
      * Player1, és Player2 az aktuális játékosok
      */
-    public static void createConfigFile() {
+    public void createConfigFile() {
         p = new Properties();
         myConfigFileName = System.getProperty("user.home") + "//game//" + "game.xml";
         File myConfigFile = new File(myConfigFileName);
@@ -85,12 +105,12 @@ public class SettingsXML {
      * @param key   a tulajdonság kulcsa
      * @param value a kulcshoz tartozó érték
      */
-    public static void setKeyValue(String key, String value) {
+    public void setKeyValue(String key, String value) {
         p.setProperty(key, value);
     }
 
 
-    public static void setPlayers(String p1, String p2) {
+    public void setPlayers(String p1, String p2) {
         p.setProperty("Player1", p1);
         p.setProperty("Player2", p2);
         writeSettingsFileXML();
@@ -102,7 +122,7 @@ public class SettingsXML {
      * @param sParam kiolvasandó kulcs
      * @return a kulcshoz tartozó érték
      */
-    public static String readSettingsFileXML(String sParam) {
+    public String readSettingsFileXML(String sParam) {
         String sValue;
         sValue = p.getProperty(sParam);
         if (sValue != null)
@@ -111,7 +131,7 @@ public class SettingsXML {
             return "";
     }
 
-    public static String[] readSettingsFileHScore() {
+    public String[] readSettingsFileHScore() {
         String sName, sValue;
         sName = p.getProperty("HighScoreName");
         sValue = p.getProperty("HighScorePoint");
@@ -122,7 +142,7 @@ public class SettingsXML {
         return (new String[]{sName, sValue});
     }
 
-    public static void writeSettingsFileHScore(String name, String point) {
+    public void writeSettingsFileHScore(String name, String point) {
         setKeyValue("HighScoreName", name);
         setKeyValue("HighScorePoint", point);
         writeSettingsFileXML();
@@ -132,7 +152,7 @@ public class SettingsXML {
      * A játék beállításait tárolni fogó mappa létrehozása.
      * Ha már létezik, nem történik semmi.
      */
-    public static void createGameFolder() {
+    public void createGameFolder() {
         File gameFolder = new File(System.getProperty("user.home") + "//game");
         if (!gameFolder.exists()) {
             try {
@@ -152,7 +172,7 @@ public class SettingsXML {
     /**
      * A beállítások mentése az XML fájlba.
      */
-    public static void writeSettingsFileXML() {
+    public void writeSettingsFileXML() {
         try {
             p.storeToXML(new FileOutputStream(myConfigFileName), "Game settings");
         } catch (IOException io) {

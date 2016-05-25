@@ -25,6 +25,7 @@ package model;
 
 import controller.Controller;
 import controller.Square;
+import dao.HistoryXML;
 
 import java.util.ArrayList;
 
@@ -289,8 +290,8 @@ public class GameLogic {
             controller.gameOver();
             controller.updateScores(score);
             controller.updateHighScores(HighScore.checkHighScore(score));
-            HistoryXML.saveData(controller.strP1, score[0]);
-            HistoryXML.saveData(controller.strP2, score[1]);
+            HistoryXML.getInstance().saveData(controller.strP1, score[0]);
+            HistoryXML.getInstance().saveData(controller.strP2, score[1]);
         }
     }
 }

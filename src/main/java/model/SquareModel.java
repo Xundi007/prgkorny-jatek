@@ -50,11 +50,7 @@ public class SquareModel {
         isNeutral = false;
         this.owner = owner;
 
-        if (owner == 0 || owner == 1) {
-            isNeutral = false;
-        } else {
-            isNeutral = true;
-        }
+        isNeutral = !(owner == 0 || owner == 1);
     }
 
     @Override

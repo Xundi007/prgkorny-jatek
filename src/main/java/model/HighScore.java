@@ -23,10 +23,12 @@ package model;
  */
 
 
+import dao.SettingsXML;
+
 public class HighScore {
 
     public static String[] checkHighScore(int[] score) {
-        String[] highScore = SettingsXML.readSettingsFileHScore();
+        String[] highScore = SettingsXML.getInstance().readSettingsFileHScore();
         String[] new_HS = new String[]{"NEM", ""};
         if (score[0] == score[1]) {
             if (score[0] > Integer.parseInt(highScore[1])) {

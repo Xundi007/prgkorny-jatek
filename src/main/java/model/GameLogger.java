@@ -23,6 +23,7 @@ package model;
  */
 
 
+import dao.SettingsXML;
 import view.View;
 
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class GameLogger {
      * így lehetőség nyílik az igényeknek megfelelő naplózás beállítására.
      */
     public static void initLogger() {
-        String stmp = SettingsXML.readSettingsFileXML("EnableLog");
+        String stmp = SettingsXML.getInstance().readSettingsFileXML("EnableLog");
         Date date = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
         if (stmp.equals("yes") || stmp.equals("")) {
@@ -73,7 +74,7 @@ public class GameLogger {
         if (enableLog) {
             try {
                 fh = new FileHandler(System.getProperty("user.home") + "//game//" + "game" + df.format(date) + ".log");
-                stmp = SettingsXML.readSettingsFileXML("logLevel");
+                stmp = SettingsXML.getInstance().readSettingsFileXML("logLevel");
                 if (stmp.equals(""))
                     stmp = "INFO";
                 switch (stmp) {

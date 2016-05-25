@@ -23,6 +23,8 @@ package controller;
  */
 
 
+import dao.HistoryXML;
+import dao.SettingsXML;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -39,7 +41,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import model.*;
+import model.GameLogger;
+import model.GameLogic;
+import model.SquareModel;
 
 import java.io.IOException;
 import java.net.URL;
@@ -89,7 +93,7 @@ public class Controller implements Initializable {
         strP1 = txtPlayerOne.getText();
         strP2 = txtPlayerTwo.getText();
 
-        SettingsXML.setPlayers(strP1, strP2);
+        SettingsXML.getInstance().setPlayers(strP1, strP2);
         updateScores(new int[]{0, 0});
     }
 
@@ -99,7 +103,8 @@ public class Controller implements Initializable {
         alert.initStyle(StageStyle.UTILITY);
         alert.setTitle("Eredmények");
         alert.setHeaderText("Az eddig lejátszott játszmák eredményei.");
-        TextArea textArea = new TextArea(HistoryXML.getData());
+
+        TextArea textArea = new TextArea(HistoryXML.getInstance().getData());
         textArea.setEditable(false);
         textArea.setWrapText(true);
 
@@ -165,7 +170,9 @@ public class Controller implements Initializable {
     }
 
     public void setUpSquares() {
-        // Arguably shouldn't really do this in the controller, but avoiding it gets messy.
+        /*
+        *
+        */
         squares = new ArrayList<>();
         squareModels = new ArrayList<>();
         logic = new GameLogic(squares, squareModels, this);
@@ -205,23 +212,23 @@ public class Controller implements Initializable {
         p2_score.setText(strP2 + " pontszáma: " + scores[1]);
     }
 
-    public void setHighScoreText(String name, int score) {
+    public void setHighScoreText(String name, String score) {
         high_score.setText(name + " : " + score);
     }
 
     public void updateHighScores(String[] tmpHS) {
         switch (tmpHS[0]) {
             case "01":
-                setHighScoreText(strP1 + ", " + strP2, Integer.parseInt(tmpHS[1]));
-                SettingsXML.writeSettingsFileHScore(strP1, tmpHS[1]);
+                setHighScoreText(strP1 + ", " + strP2, tmpHS[1]);
+                SettingsXML.getInstance().writeSettingsFileHScore(strP1, tmpHS[1]);
                 break;
             case "0":
-                setHighScoreText(strP1, Integer.parseInt(tmpHS[1]));
-                SettingsXML.writeSettingsFileHScore(strP1, tmpHS[1]);
+                setHighScoreText(strP1, tmpHS[1]);
+                SettingsXML.getInstance().writeSettingsFileHScore(strP1, tmpHS[1]);
                 break;
             case "1":
-                setHighScoreText(strP2, Integer.parseInt(tmpHS[1]));
-                SettingsXML.writeSettingsFileHScore(strP2, tmpHS[1]);
+                setHighScoreText(strP2, tmpHS[1]);
+                SettingsXML.getInstance().writeSettingsFileHScore(strP2, tmpHS[1]);
                 break;
             case "NEM":
                 break;
@@ -283,8 +290,9 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SettingsXML.createGameFolder();
-        SettingsXML.createConfigFile();
+        SettingsXML settings = SettingsXML.getInstance();
+        settings.createGameFolder();
+        settings.createConfigFile();
         GameLogger.initLogger();
         GameLogger.addLog("FT", "A logger elindult.", null);
 
@@ -296,9 +304,9 @@ public class Controller implements Initializable {
 
         GameLogger.addLog("F", "A játékos adatok betöltése elkezdődött...", null);
         String playerName1, playerName2;
-        String[] highScore = SettingsXML.readSettingsFileHScore();
-        playerName1 = SettingsXML.readSettingsFileXML("Player1");
-        playerName2 = SettingsXML.readSettingsFileXML("Player2");
+        String[] highScore = settings.readSettingsFileHScore();
+        playerName1 = settings.readSettingsFileXML("Player1");
+        playerName2 = settings.readSettingsFileXML("Player2");
         if (playerName1.equals(""))
             playerName1 = "Player1";
         if (playerName2.equals(""))
@@ -308,7 +316,7 @@ public class Controller implements Initializable {
         strP1 = playerName1;
         strP2 = playerName2;
         updateScores(new int[]{0, 0});
-        setHighScoreText(highScore[0], Integer.parseInt(highScore[1]));
+        setHighScoreText(highScore[0], highScore[1]);
         GameLogger.addLog("F", "A játékos adatok betöltése megtörtént.", null);
     }
 }
