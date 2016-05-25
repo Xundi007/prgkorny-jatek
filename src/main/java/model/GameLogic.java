@@ -157,10 +157,14 @@ public class GameLogic {
         cFrom = sCol - 1;
         cTo = sCol + 1;
 
-        if (sRow == 0) rFrom = 0;
-        if (sCol == 0) cFrom = 0;
-        if (sRow == 5) rTo = 5;
-        if (sCol == 5) cTo = 5;
+        if (sRow == 0)
+            rFrom = 0;
+        if (sCol == 0)
+            cFrom = 0;
+        if (sRow == 5)
+            rTo = 5;
+        if (sCol == 5)
+            cTo = 5;
 
         /*
         * Lépési lehetőség ellenőrzés:
@@ -225,7 +229,8 @@ public class GameLogic {
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
                 if (getSquareModel(col, row).owner == currentPlayer) {
-                    if (isThereAnyStep(row, col)) return false;
+                    if (isThereAnyStep(row, col))
+                        return false;
                 }
             }
         }
@@ -247,10 +252,14 @@ public class GameLogic {
         cFrom = sCol - 1;
         cTo = sCol + 1;
 
-        if (sRow == 0) rFrom = 0;
-        if (sCol == 0) cFrom = 0;
-        if (sRow == 5) rTo = 5;
-        if (sCol == 5) cTo = 5;
+        if (sRow == 0)
+            rFrom = 0;
+        if (sCol == 0)
+            cFrom = 0;
+        if (sRow == 5)
+            rTo = 5;
+        if (sCol == 5)
+            cTo = 5;
 
         for (int row = rFrom; row <= rTo; row++) {
             for (int col = cFrom; col <= cTo; col++) {

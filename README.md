@@ -9,7 +9,7 @@
 
 ##Előkövetelmény:
 - maven 3.x
-- jdk 1.8
+- jdk 1.8.0_40+
 
 ##Futtatás:
 A projekt könyvtárából a következő parancsokkal:
