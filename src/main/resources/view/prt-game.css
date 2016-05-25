@@ -30,36 +30,8 @@
     -fx-alignment: center;
 }
 
-.prt-game-board > .board-grid {
-    -fx-background-color: darkgreen;
-    -fx-border-color: transparent;
-}
-
-.prt-game-board .hint {
-    -fx-border-color: khaki;
-}
-
 .prt-game-board .label:disabled {
     -fx-opacity: 1.0;
-}
-
-.prt-game-board > .board-grid > .label {
-    -fx-font-size: 32pt;
-}
-
-.prt-game-board > .board-grid > .O {
-    -fx-text-fill: lightgoldenrodyellow;
-    -fx-background-color: red;
-}
-
-.prt-game-board > .board-grid > .X {
-    -fx-text-fill: olive;
-    -fx-background-color: blue;
-}
-
-.status {
-    -fx-font-size: 24pt;
-    -fx-text-fill: sandybrown;
 }
 
 .square {

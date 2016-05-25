@@ -143,6 +143,7 @@ public class HistoryXML {
 
     /**
      * A játékosok és pontszámaik listázása.
+     * @return a kiolvasott eredmények.
      */
     public String getData() {
         GameLogger.addLog("FT", "Eredmények kiolvasása elkezdődött...", null);
